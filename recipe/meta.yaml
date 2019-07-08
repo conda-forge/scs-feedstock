@@ -1,6 +1,6 @@
 {% set name = "scs" %}
-{% set version = "2.1.0" %}
-{% set sha256 = "1d67a34b36ef31fc23eeb29c97d3b126d8c70f6420e4da600d674f478d1985d4" %}
+{% set version = "2.1.1" %}
+{% set sha256 = "9d4d3ee40912bf9b6f93377bb1ab4ff86d4bed3b5f2b8289bbceb03ccc552b55" %}
 
 package:
   name: {{ name|lower }}
