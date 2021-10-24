@@ -1,12 +1,16 @@
-{% set version = "2.1.4" %}
+{% set version = "3.0.0" %}
 
 package:
   name: scs
-  version: {{ version|replace('-', '.') }}    # 2.1.1-2 => 2.1.1.2
+  version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/s/scs/scs-{{ version }}.tar.gz
-  sha256: ddd6614db7f0e63b69672cfd02ba2c8423dade33a58b0a341a5119091c501739
+  - url: https://github.com/bodono/scs-python/archive/refs/tags/{{ version }}.tar.gz
+    sha256: b962c8d757f49602aa2223f88b303504fe6dbf8249f2378e323ca197ed030202
+  # include submodule (not in github tarball due to dear-github/dear-github#214)
+  - git_url: https://github.com/cvxgrp/scs.git
+    git_rev: 5be0e1684d12c4cfd4d22c5fba236a84a092ab5b
+    folder: scs
 
 build:
   number: 0
