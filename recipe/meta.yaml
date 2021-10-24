@@ -36,6 +36,9 @@ requirements:
     - python
     - {{ pin_compatible('numpy') }}
     - scipy >=0.13.2
+  run_constrained:
+    # avoid installing incompatible cvxpy
+    - cvxpy >1.1.15
 
 test:
   imports:
