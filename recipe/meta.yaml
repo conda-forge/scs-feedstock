@@ -75,7 +75,9 @@ outputs:
       source_files:
         - test/
       commands:
+        {% if cuda_compiler_version == "None" %}
         - pytest test/ -v  # [not ppc64le]
+        {% endif %}
         # NOTE: test suite is skipped on ppc due to bugs in QEMU code that cause
         # CI to fail, even though the tests should run through on native hardware
 
