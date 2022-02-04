@@ -12,6 +12,8 @@ channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge main
+cuda_compiler_version:
+- None
 docker_image:
 - quay.io/condaforge/linux-anvil-cos7-x86_64
 libblas:
@@ -29,5 +31,9 @@ python:
 target_platform:
 - linux-aarch64
 zip_keys:
+- - c_compiler_version
+  - cuda_compiler_version
+  - cdt_name
+  - docker_image
 - - python
   - numpy

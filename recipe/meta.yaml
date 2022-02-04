@@ -1,58 +1,85 @@
 {% set version = "3.1.0" %}
+# see github.com/conda-forge/conda-forge.github.io/issues/1059 for naming discussion
+{% set scs_proc_type = "cuda" if cuda_compiler_version != "None" else "cpu" %}
 
 package:
-  name: scs
+  name: scs-split
   version: {{ version }}
 
 source:
   - url: https://github.com/bodono/scs-python/archive/refs/tags/{{ version }}.tar.gz
     sha256: 4b75102599310e56d000dbe6deced4b46806658e1a8eb08b190715207ac76500
+    patches:
+      # remove pyproject.toml, which spuriously tries to install stuff
+      - patches/0001-remove-pyproject.toml.patch
   # include submodule (not in github tarball due to dear-github/dear-github#214)
   - git_url: https://github.com/cvxgrp/scs.git
     git_rev: 1cf5cbc64fc5e30e81a4f687c66bdc97c3ab8754
     folder: scs
 
 build:
-  number: 0
-  script:
-    - export BLAS_LAPACK_LIB_PATHS="$PREFIX/lib"    # [unix]
-    - export BLAS_LAPACK_LIBS="lapack:cblas:blas"   # [unix]
-    - {{ PYTHON }} -m pip install . -vv
+  number: 1
+  skip: true  # [win and cuda_compiler_version == "10.2"]
 
 requirements:
   build:
-    - python                                 # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - numpy                                  # [build_platform != target_platform]
     - {{ compiler('c') }}
-  host:
-    - libblas
-    - liblapack
-    - python
-    - setuptools
-    - pip
-    - numpy
-  run:
-    - python
-    - {{ pin_compatible('numpy') }}
-    - scipy >=0.13.2
-  run_constrained:
-    # avoid installing incompatible cvxpy
-    - cvxpy >1.1.15
 
-test:
-  imports:
-    - scs
-    - _scs_direct
-    - _scs_indirect
-  requires:
-    - pytest
-  source_files:
-    - test/
-  commands:
-    - pytest test/ -v  # [not ppc64le]
-    # NOTE: test suite is skipped on ppc due to bugs in QEMU code that cause
-    # CI to fail, even though the tests should run through on native hardware
+outputs:
+  # A meta-package to select CPU or GPU build for scs.
+  - name: scs-proc
+    version: 1.0.0
+    build:
+      string: {{ scs_proc_type }}
+    test:
+      commands:
+        - exit 0
+
+  - name: scs
+    script: build-pkg.sh   # [not win]
+    script: build-pkg.bat  # [win]
+    build:
+      string: "py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ scs_proc_type }}"                                                  # [cuda_compiler_version == "None"]
+      string: "py{{ CONDA_PY }}cuda{{ cuda_compiler_version|replace(".", "") }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_{{ scs_proc_type }}"  # [cuda_compiler_version != "None"]
+    requirements:
+      build:
+        - python                                 # [build_platform != target_platform]
+        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+        - numpy                                  # [build_platform != target_platform]
+        - {{ compiler('c') }}
+        - {{ compiler('cuda') }}                 # [cuda_compiler_version != "None"]
+      host:
+        - python
+        - setuptools
+        - pip
+        - numpy
+        - scipy
+        - libblas
+        - liblapack
+      run:
+        - python
+        - {{ pin_compatible('numpy') }}
+        - scipy
+      run_constrained:
+        # avoid installing incompatible cvxpy
+        - cvxpy >1.1.15
+        - scs-proc =*={{ scs_proc_type }}
+
+    test:
+      imports:
+        - scs
+        - _scs_direct
+        - _scs_indirect
+      requires:
+        - pytest
+      source_files:
+        - test/
+      commands:
+        {% if cuda_compiler_version == "None" %}
+        - pytest test/ -v  # [not ppc64le]
+        {% endif %}
+        # NOTE: test suite is skipped on ppc due to bugs in QEMU code that cause
+        # CI to fail, even though the tests should run through on native hardware
 
 about:
   home: https://github.com/bodono/scs-python
@@ -73,3 +100,4 @@ extra:
     - djsutherland
     - mcg1969
     - h-vetinari
+  feedstock-name: scs
