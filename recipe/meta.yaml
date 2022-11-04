@@ -1,4 +1,4 @@
-{% set version = "3.2.0" %}
+{% set version = "3.2.2" %}
 
 package:
   name: scs
@@ -6,14 +6,14 @@ package:
 
 source:
   - url: https://github.com/bodono/scs-python/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 11d8f204e4dc44299120d9814f0ade8312a3817e7e161ea13fcafc1599714f41
+    sha256: f88b5ba0752d19dc3323374e122ab95b26bc6ea17cc09880959150ec3a31f2af
   # include submodule (not in github tarball due to dear-github/dear-github#214)
   - git_url: https://github.com/cvxgrp/scs.git
     git_rev: ac6840a3b3264950e6c300264cbf3937e0bcc6c5
     folder: scs
 
 build:
-  number: 2
+  number: 0
   script:
     - export BLAS_LAPACK_LIB_PATHS="$PREFIX/lib"    # [unix]
     - export BLAS_LAPACK_LIBS="lapack:cblas:blas"   # [unix]
