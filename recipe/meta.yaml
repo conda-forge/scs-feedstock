@@ -1,4 +1,4 @@
-{% set version = "3.2.3" %}
+{% set version = "3.2.4" %}
 
 package:
   name: scs
@@ -6,7 +6,7 @@ package:
 
 source:
   - url: https://github.com/bodono/scs-python/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 7592805810fb6da09955dc45322b2d376bca993928c972f472f1a5352821ddcd
+    sha256: aa47b02dd4094ab83ce98b0cfa022f3d88a222d6e92a8dd3503144cd3871ea5b
   # include submodule (not in github tarball due to dear-github/dear-github#214)
   - git_url: https://github.com/cvxgrp/scs.git
     git_rev: ac6840a3b3264950e6c300264cbf3937e0bcc6c5
