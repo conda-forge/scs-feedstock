@@ -1,4 +1,4 @@
-{% set version = "3.2.3" %}
+{% set version = "3.2.4.post1" %}
 
 package:
   name: scs
@@ -6,30 +6,41 @@ package:
 
 source:
   - url: https://github.com/bodono/scs-python/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 7592805810fb6da09955dc45322b2d376bca993928c972f472f1a5352821ddcd
+    sha256: bb509507d857906eb95d17d5824138e48e7c75d1a692d0aa7256d899c7e703c5
   # include submodule (not in github tarball due to dear-github/dear-github#214)
   - git_url: https://github.com/cvxgrp/scs.git
-    git_rev: ac6840a3b3264950e6c300264cbf3937e0bcc6c5
-    folder: scs
+    git_rev: 9024b8ccc1bba6ee797440fb22354cadb9c81839
+    folder: scs_source
 
 build:
   number: 0
   script:
-    - export BLAS_LAPACK_LIB_PATHS="$PREFIX/lib"    # [unix]
-    - export BLAS_LAPACK_LIBS="lapack:cblas:blas"   # [unix]
-    - {{ PYTHON }} -m pip install . -vv
+    # Copy Meson args split from pandas feedstock but split on cross-compiling
+    # instead of unix/win because Linux aarch64 does not work with the Meson
+    # args modification (fails to find blas/lapack)
+    #
+    # See https://github.com/conda-forge/pandas-feedstock/blob/ea054ffba9cda5f10436e1c7250e62d7ee1aacd1/recipe/meta.yaml#L20-L22
+    - MESON_ARGS_REDUCED="$(echo $MESON_ARGS | sed 's/--buildtype release //g')"              # [not aarch64 and build_platform != target_platform]
+    - {{ PYTHON }} -m pip install . -vv -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=}  # [not aarch64 and build_platform != target_platform]
+    - {{ PYTHON }} -m pip install . -vv                                                       # [aarch64 or build_platform == target_platform]
+  # Following scipy feedstock (see https://github.com/conda-forge/scipy-feedstock/blob/4fde29215004ce771f5407153e4df438b76afa57/recipe/meta.yaml#L43-L45):
+  #
+  # pypy on aarch/ppc is un(der)maintained and currently broken, see
+  # https://github.com/conda-forge/pypy3.6-feedstock/issues/111
+  skip: true  # [ppc64le and python_impl == "pypy"]
 
 requirements:
   build:
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - numpy                                  # [build_platform != target_platform]
+    - meson-python                           # [build_platform != target_platform]
     - {{ compiler('c') }}
   host:
     - libblas
     - liblapack
     - python
-    - setuptools
+    - meson-python
     - pip
     - numpy
   run:
