@@ -43,13 +43,13 @@ requirements:
     - libblas
     - liblapack
     - python  # [python_impl == "pypy"]
-    - python =3.11 # [python_impl != "pypy"]
+    - python =3.11  # [python_impl != "pypy"]
     - meson-python
     - pip
     - numpy =1.23
   run:
     - python  # [python_impl == "pypy"]
-    - python =3.11 # [python_impl != "pypy"]
+    - python =3.11  # [python_impl != "pypy"]
     - {{ pin_compatible('numpy') }}
     - scipy >=0.13.2
   run_constrained:
