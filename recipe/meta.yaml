@@ -20,12 +20,14 @@ build:
     # args modification (fails to find blas/lapack)
     #
     # See https://github.com/conda-forge/pandas-feedstock/blob/ea054ffba9cda5f10436e1c7250e62d7ee1aacd1/recipe/meta.yaml#L20-L22
+    - MESON_ARGS_REDUCED="$(echo $MESON_ARGS | sed 's/--buildtype release //g')" 
     - {{ PYTHON }} -c "import importlib.machinery; print('Extension suffixes:', importlib.machinery.EXTENSION_SUFFIXES)"
     - echo MESON_ARGS $MESON_ARGS
     - echo MESON_ARGS_REDUCED $MESON_ARGS_REDUCED
-    # - {{ PYTHON }} -m pip install . -vv -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=}  # [not aarch64 and build_platform != target_platform]
+    - echo MESON_ARGS_REDUCEDsubbed ${MESON_ARGS_REDUCED// / -Csetup-args=}
     - echo "python = '${PREFIX}/bin/python'" >> ${CONDA_PREFIX}/meson_cross_file.txt
-    - {{ PYTHON }} -m pip install . -vv
+    - {{ PYTHON }} -m pip install . -vv -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=}
+    # - {{ PYTHON }} -m pip install . -vv
   # Following scipy feedstock (see https://github.com/conda-forge/scipy-feedstock/blob/4fde29215004ce771f5407153e4df438b76afa57/recipe/meta.yaml#L43-L45):
   #
   # pypy on aarch/ppc is un(der)maintained and currently broken, see
