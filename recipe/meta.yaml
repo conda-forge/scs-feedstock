@@ -48,7 +48,6 @@ requirements:
     - libblas
     - liblapack
     - python
-    - python-build
     - meson-python
     - pkg-config
     - pip
