@@ -26,9 +26,9 @@ build:
     - echo MESON_ARGS_REDUCED $MESON_ARGS_REDUCED
     - echo MESON_ARGS_REDUCEDsubbed ${MESON_ARGS_REDUCED// / -Csetup-args=}
     - echo "python = '${PREFIX}/bin/python'" >> ${CONDA_PREFIX}/meson_cross_file.txt
-    # - {{ PYTHON }} -m pip install . -vv -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=}
-    - {{ PYTHON }} -m build -w -n -x -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=}
-    - {{ PYTHON }} -m pip install dist/scs*.whl
+    - {{ PYTHON }} -m pip install . -vv -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=}
+    # - {{ PYTHON }} -m build -w -n -x -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=}
+    # - {{ PYTHON }} -m pip install dist/scs*.whl
     # - {{ PYTHON }} -m pip install . -vv
   # Following scipy feedstock (see https://github.com/conda-forge/scipy-feedstock/blob/4fde29215004ce771f5407153e4df438b76afa57/recipe/meta.yaml#L43-L45):
   #
@@ -42,6 +42,7 @@ requirements:
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - numpy                                  # [build_platform != target_platform]
     - meson-python                           # [build_platform != target_platform]
+    - pkg-config                             # [build_platform != target_platform]
     - {{ compiler('c') }}
   host:
     - libblas
@@ -49,6 +50,7 @@ requirements:
     - python
     - python-build
     - meson-python
+    - pkg-config
     - pip
     - numpy
   run:
