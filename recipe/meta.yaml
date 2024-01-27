@@ -13,7 +13,7 @@ source:
     folder: scs_source
 
 build:
-  number: 1
+  number: 0
   script:
     # Copy cross-compile meson file hack from scipy feedstock:
     # See https://github.com/conda-forge/scipy-feedstock/blob/9401aa4ee5d9a22c2c9d219e5fb6dbd580f30207/recipe/build.sh#L10
