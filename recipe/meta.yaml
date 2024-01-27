@@ -1,4 +1,4 @@
-{% set version = "3.2.3" %}
+{% set version = "3.2.4.post1" %}
 
 package:
   name: scs
@@ -6,31 +6,42 @@ package:
 
 source:
   - url: https://github.com/bodono/scs-python/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 7592805810fb6da09955dc45322b2d376bca993928c972f472f1a5352821ddcd
+    sha256: bb509507d857906eb95d17d5824138e48e7c75d1a692d0aa7256d899c7e703c5
   # include submodule (not in github tarball due to dear-github/dear-github#214)
   - git_url: https://github.com/cvxgrp/scs.git
-    git_rev: ac6840a3b3264950e6c300264cbf3937e0bcc6c5
-    folder: scs
+    git_rev: 9024b8ccc1bba6ee797440fb22354cadb9c81839
+    folder: scs_source
 
 build:
   number: 0
   script:
-    - export BLAS_LAPACK_LIB_PATHS="$PREFIX/lib"    # [unix]
-    - export BLAS_LAPACK_LIBS="lapack:cblas:blas"   # [unix]
-    - {{ PYTHON }} -m pip install . -vv
+    # Copy cross-compile meson file hack from scipy feedstock:
+    # See https://github.com/conda-forge/scipy-feedstock/blob/9401aa4ee5d9a22c2c9d219e5fb6dbd580f30207/recipe/build.sh#L10
+    - echo "python = '${PREFIX}/bin/python'" >> ${CONDA_PREFIX}/meson_cross_file.txt
+    # Copy cross-compile Meson args filtering from numpy/scipy/pandas feedstocks
+    # See https://github.com/conda-forge/scipy-feedstock/blob/9401aa4ee5d9a22c2c9d219e5fb6dbd580f30207/recipe/build.sh#L14
+    - MESON_ARGS_REDUCED="$(echo $MESON_ARGS | sed 's/--buildtype release //g')"              # [build_platform != target_platform]
+    - {{ PYTHON }} -m pip install . -vv -Csetup-args=${MESON_ARGS_REDUCED// / -Csetup-args=}  # [build_platform != target_platform]
+    - {{ PYTHON }} -m pip install . -vv                                                       # [build_platform == target_platform]
+  # ppc pypy package has misconfiguration which meson-python will not accept.
+  # See https://github.com/conda-forge/pypy3.6-feedstock/issues/115
+  skip: true  # [ppc64le and python_impl == "pypy"]
 
 requirements:
   build:
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - numpy                                  # [build_platform != target_platform]
+    - meson-python                           # [build_platform != target_platform]
+    - pkg-config                             # [build_platform != target_platform]
     - {{ compiler('c') }}
   host:
     - libblas
     - liblapack
     - python
-    - setuptools
+    - meson-python
     - pip
+    - pkg-config
     - numpy
   run:
     - python
