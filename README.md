@@ -404,6 +404,5 @@ Feedstock Maintainers
 
 * [@djsutherland](https://github.com/djsutherland/)
 * [@h-vetinari](https://github.com/h-vetinari/)
-* [@mcg1969](https://github.com/mcg1969/)
 * [@wshanks](https://github.com/wshanks/)
 
