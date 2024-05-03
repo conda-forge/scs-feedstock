@@ -39,6 +39,7 @@ requirements:
     - meson-python                           # [build_platform != target_platform]
     - pkg-config
     - {{ compiler('c') }}
+    - {{ stdlib('c') }}
   host:
     - libblas 3.9.* *{{ blas_impl }}
     - liblapack 3.9.* *{{ blas_impl }}
