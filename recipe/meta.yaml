@@ -8,7 +8,8 @@ source:
   - url: https://github.com/bodono/scs-python/archive/refs/tags/{{ version }}.tar.gz
     sha256: bb509507d857906eb95d17d5824138e48e7c75d1a692d0aa7256d899c7e703c5
     patches:
-      - gh84.patch
+      # backport https://github.com/bodono/scs-python/pull/84
+      - patches/0001-Add-support-for-MKL-pardiso-in-meson-build.-84.patch
   # include submodule (not in github tarball due to dear-github/dear-github#214)
   - git_url: https://github.com/cvxgrp/scs.git
     git_rev: 9024b8ccc1bba6ee797440fb22354cadb9c81839
