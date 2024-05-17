@@ -16,7 +16,7 @@ source:
     folder: scs_source
 
 build:
-  number: 3
+  number: 4
   string: mkl_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}        # [blas_impl == "mkl"]
   string: default_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}    # [blas_impl != "mkl"]
   script:
@@ -52,7 +52,6 @@ requirements:
     - numpy
   run:
     - python
-    - {{ pin_compatible('numpy') }}
     - scipy >=0.13.2
     - libblas * *{{ blas_impl }}             # [blas_impl == "mkl"]
     - liblapack * *{{ blas_impl }}           # [blas_impl == "mkl"]
