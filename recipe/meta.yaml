@@ -1,4 +1,4 @@
-{% set version = "3.2.4.post1" %}
+{% set version = "3.2.4.post2" %}
 
 package:
   name: scs
@@ -6,7 +6,7 @@ package:
 
 source:
   - url: https://github.com/bodono/scs-python/archive/refs/tags/{{ version }}.tar.gz
-    sha256: bb509507d857906eb95d17d5824138e48e7c75d1a692d0aa7256d899c7e703c5
+    sha256: c010fd88b905240fc5e0ce10bb122ce0d22be30954b6fca22536bdd0197ad185
     patches:
       # backport https://github.com/bodono/scs-python/pull/84
       - patches/0001-Add-support-for-MKL-pardiso-in-meson-build.-84.patch
@@ -16,9 +16,9 @@ source:
     folder: scs_source
 
 build:
-  number: 4
-  string: mkl_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}        # [blas_impl == "mkl"]
-  string: default_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}    # [blas_impl != "mkl"]
+  number: 0
+  string: mkl_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [blas_impl == "mkl"]
+  string: default_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [blas_impl != "mkl"]
   script:
     # Copy cross-compile meson file hack from scipy feedstock:
     # See https://github.com/conda-forge/scipy-feedstock/blob/9401aa4ee5d9a22c2c9d219e5fb6dbd580f30207/recipe/build.sh#L10
