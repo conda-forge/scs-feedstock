@@ -13,7 +13,7 @@ source:
     folder: scs_source
 
 build:
-  number: 0
+  number: 1
   string: mkl_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [blas_impl == "mkl"]
   string: default_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [blas_impl != "mkl"]
   script:
