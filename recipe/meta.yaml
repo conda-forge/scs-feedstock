@@ -7,10 +7,13 @@ package:
 source:
   - url: https://github.com/bodono/scs-python/archive/refs/tags/{{ version }}.tar.gz
     sha256: 63a0491941c0d680d57e2dd3258b279d983f586583f481845605f769df07039a
-  # include submodule (not in github tarball due to dear-github/dear-github#214)
+  # include submodules (not in github tarball due to dear-github/dear-github#214)
   - git_url: https://github.com/cvxgrp/scs.git
     git_rev: ef77ae11181f399ea3e35122944ba3091ee1a77f
     folder: scs_source
+  - git_url: https://github.com/python/pythoncapi-compat.git
+    git_rev: fde4d3457d7c1e6f7d09afeae5afd2218fbb2cae
+    folder: scs/pythoncapi-compat
 
 build:
   number: 1
