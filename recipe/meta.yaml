@@ -1,4 +1,4 @@
-{% set version = "3.2.7.post2" %}
+{% set version = "3.2.9" %}
 
 package:
   name: scs
@@ -6,14 +6,17 @@ package:
 
 source:
   - url: https://github.com/bodono/scs-python/archive/refs/tags/{{ version }}.tar.gz
-    sha256: b7449b9b92b7bc2fe013b7eaaae013072c71f39aef701bb64ca63cf5957c5d98
+    sha256: 56973e33629a40de41648591cc288096803d09c86c7a0ef8291f33a157f8c312
   # include submodule (not in github tarball due to dear-github/dear-github#214)
   - git_url: https://github.com/cvxgrp/scs.git
-    git_rev: 775a04634e40177573871c9cb6baae254342de39
+    git_rev: c8297172633bcb3a10d4781a19d4769ce5282d29
     folder: scs_source
+  - git_url: https://github.com/python/pythoncapi-compat.git
+    git_rev: fde4d3457d7c1e6f7d09afeae5afd2218fbb2cae
+    folder: scs/pythoncapi-compat
 
 build:
-  number: 1
+  number: 0
   string: mkl_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [blas_impl == "mkl"]
   string: default_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [blas_impl != "mkl"]
   script:
@@ -59,9 +62,9 @@ requirements:
 test:
   imports:
     - scs
-    - _scs_direct
-    - _scs_indirect
-    - _scs_mkl   # [blas_impl == "mkl"]
+    - scs._scs_direct
+    - scs._scs_indirect
+    - scs._scs_mkl   # [blas_impl == "mkl"]
   requires:
     - pytest
   source_files:
