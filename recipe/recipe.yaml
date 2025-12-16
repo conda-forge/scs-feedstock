@@ -17,7 +17,7 @@ source:
     target_directory: scs/pythoncapi-compat
 
 build:
-  number: 1
+  number: 2
   string: ${{ ("mkl_py" if blas_impl == "mkl" else "default_py") }}${{ python | version_to_buildstring }}h${{ hash }}_${{ build_number }}
   script:
     - if: unix
