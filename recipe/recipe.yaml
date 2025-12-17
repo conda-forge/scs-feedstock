@@ -1,5 +1,7 @@
 context:
   version: "3.2.9"
+  # strip netlib constraint because we're overriding blas_impl here
+  blas_pin_no_impl: "${{ (libblas | split(' '))[0] if libblas else '*' }}"
 
 package:
   name: scs
@@ -37,8 +39,8 @@ requirements:
   build:
     - if: build_platform != target_platform
       then:
-        - libblas
-        - liblapack
+        - libblas ${{ blas_pin_no_impl }}
+        - liblapack ${{ blas_pin_no_impl }}
         - libblas * *${{ blas_impl }}
         - liblapack * *${{ blas_impl }}
         - python
@@ -49,8 +51,8 @@ requirements:
     - ${{ compiler('c') }}
     - ${{ stdlib('c') }}
   host:
-    - libblas
-    - liblapack
+    - libblas ${{ blas_pin_no_impl }}
+    - liblapack ${{ blas_pin_no_impl }}
     - libblas * *${{ blas_impl }}
     - liblapack * *${{ blas_impl }}
     - if: blas_impl == "mkl"
