@@ -37,8 +37,10 @@ requirements:
   build:
     - if: build_platform != target_platform
       then:
-        - libblas 3.9.* *${{ blas_impl }}
-        - liblapack 3.9.* *${{ blas_impl }}
+        - libblas
+        - liblapack
+        - libblas * *${{ blas_impl }}
+        - liblapack * *${{ blas_impl }}
         - python
         - cross-python_${{ target_platform }}
         - numpy
@@ -47,8 +49,10 @@ requirements:
     - ${{ compiler('c') }}
     - ${{ stdlib('c') }}
   host:
-    - libblas 3.9.* *${{ blas_impl }}
-    - liblapack 3.9.* *${{ blas_impl }}
+    - libblas
+    - liblapack
+    - libblas * *${{ blas_impl }}
+    - liblapack * *${{ blas_impl }}
     - if: blas_impl == "mkl"
       then:
         - mkl-devel
@@ -61,8 +65,8 @@ requirements:
     - scipy >=0.13.2
     - if: blas_impl == "mkl"
       then:
-        - libblas 3.9.* *${{ blas_impl }}
-        - liblapack 3.9.* *${{ blas_impl }}
+        - libblas * *${{ blas_impl }}
+        - liblapack * *${{ blas_impl }}
   run_constraints:
     # avoid installing incompatible cvxpy
     - cvxpy >1.1.15
