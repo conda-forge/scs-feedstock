@@ -1,5 +1,6 @@
 context:
   version: "3.2.9"
+  build_number: 2
   # strip netlib constraint because we're overriding blas_impl here
   blas_pin_no_impl: "${{ (libblas | split(' '))[0] if libblas else '*' }}"
 
@@ -19,8 +20,8 @@ source:
     target_directory: scs/pythoncapi-compat
 
 build:
-  number: 2
-  string: ${{ ("mkl_py" if blas_impl == "mkl" else "default_py") }}${{ python | version_to_buildstring }}h${{ hash }}_${{ build_number }}
+  number: ${{ build_number }}
+  string: ${{ ("mkl" if blas_impl == "mkl" else "default") }}_py${{ python | version_to_buildstring }}h${{ hash }}_${{ build_number }}
   script:
     - if: unix
       then:
@@ -96,7 +97,6 @@ tests:
           # NOTE: test suite is skipped on ppc due to bugs in QEMU code that cause
           # CI to fail, even though the tests should run through on native hardware
           - echo "Skipping tests on ppc64le due to QEMU bugs"
-
 
 about:
   homepage: https://github.com/bodono/scs-python
