@@ -17,7 +17,6 @@ semidefinite programs (SDPs), exponential cone programs (ECPs),
 and power cone programs (PCPs), or problems with any combination of
 those cones.
 
-
 Current build status
 ====================
 
