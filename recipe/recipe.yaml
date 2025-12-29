@@ -1,6 +1,6 @@
 context:
-  version: "3.2.9"
-  build_number: 2
+  version: "3.2.10"
+  build_number: 0
   # strip netlib constraint because we're overriding blas_impl here
   blas_pin_no_impl: "${{ (libblas | split(' '))[0] if libblas else '*' }}"
 
@@ -10,7 +10,7 @@ package:
 
 source:
   - url: https://github.com/bodono/scs-python/archive/refs/tags/${{ version }}.tar.gz
-    sha256: 56973e33629a40de41648591cc288096803d09c86c7a0ef8291f33a157f8c312
+    sha256: 96b2cf24b3362ae71f4d6d03b44035edff61c3c60bb52c7928247fa536b91860
   # include submodule (not in github tarball due to dear-github/dear-github#214)
   - git: https://github.com/cvxgrp/scs.git
     rev: c8297172633bcb3a10d4781a19d4769ce5282d29
