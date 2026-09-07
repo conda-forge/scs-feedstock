@@ -13,7 +13,7 @@ source:
     sha256: 405c0c882e1964beb41246c5ad608a81e79506913e50376a39780c1cc8cfa446
   # include submodule (not in github tarball due to dear-github/dear-github#214)
   - git: https://github.com/cvxgrp/scs.git
-    rev: c8297172633bcb3a10d4781a19d4769ce5282d29
+    rev: cc244ebc4bff620e2e228e99a4e2e24ab12f9e3b
     target_directory: scs_source
   - git: https://github.com/python/pythoncapi-compat.git
     rev: fde4d3457d7c1e6f7d09afeae5afd2218fbb2cae
