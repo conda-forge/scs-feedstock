@@ -1,6 +1,6 @@
 context:
   version: "3.3.1"
-  build_number: 0
+  build_number: 1
   # strip netlib constraint because we're overriding blas_impl here
   blas_pin_no_impl: "${{ (libblas | split(' '))[0] if libblas else '*' }}"
 
